@@ -4,8 +4,9 @@ Total imported: 62
 Total skipped: 12
 --- Invalid rows ---
 intake.csv: row 8, intake.csv: row 9, intake.csv: row 10, intake.csv: row 34, intake.csv: row 35, intake.csv: row 36, intake_copy.csv: row 8, intake_copy.csv: row 9, intake_copy.csv: row 10, intake_copy.csv: row 34, intake_copy.csv: row 35, intake_copy.csv: row 36
---- Unique species Bird, Cat, Dog, Rabbit
------- Per-species breakdown
+--- Unique species ---
+Bird, Cat, Dog, Rabbit
+--- Per-species breakdown ---
 Bird:
 12 total, 4 vaccinated
 Cat:
@@ -14,7 +15,7 @@ Dog:
 22 total, 20 vaccinated
 Rabbit:
 12 total, 6 vaccinated
------- Oldest per species ---
+--- Oldest per species ---
 Bird:
 Charlie (age 4)
 Cat:

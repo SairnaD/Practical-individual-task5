@@ -51,11 +51,12 @@ public class ReportExportService {
                 }
                 writer.newLine();
 
-                writer.write("--- Unique species ");
+                writer.write("--- Unique species ---");
+                writer.newLine();
                 writer.write(String.join(", ", reportData.uniqueSpecies()));
                 writer.newLine();
 
-                writer.write("------ Per-species breakdown");
+                writer.write("--- Per-species breakdown ---");
                 writer.newLine();
 
                 for (String species : reportData.uniqueSpecies()) {
@@ -71,7 +72,7 @@ public class ReportExportService {
                     writer.newLine();
                 }
 
-                writer.write("------ Oldest per species ---");
+                writer.write("--- Oldest per species ---");
                 writer.newLine();
 
                 for (String species : reportData.uniqueSpecies()) {

@@ -5,6 +5,8 @@ import lv.bootcamp.shelter.service.data.ImportResult;
 import lv.bootcamp.shelter.service.data.ShelterReportData;
 
 import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ShelterAnalyticsService {
@@ -12,28 +14,27 @@ public class ShelterAnalyticsService {
     public ShelterReportData buildReportData(ImportResult importResult) {
         List<Animal> allAnimals = importResult.allAnimals();
 
-        Set<String> uniqueSpecies = new TreeSet<>();
-        Map<String, List<Animal>> animalsBySpecies = new HashMap<>();
-        List<String> animalsNeedingVetInput = new ArrayList<>();
+        Set<String> uniqueSpecies = allAnimals.stream()
+                .map(Animal::getSpecies)
+                .collect(Collectors.toCollection(TreeSet::new));
 
-        for (Animal animal : allAnimals) {
-            uniqueSpecies.add(animal.getSpecies());
+        Map<String, List<Animal>> animalsBySpecies = allAnimals.stream()
+                .collect(Collectors.groupingBy(
+                        Animal::getSpecies,
+                        TreeMap::new,
+                        Collectors.toList()
+                ));
 
-            animalsBySpecies.computeIfAbsent(animal.getSpecies(),
-                    species -> new ArrayList<>())
-                    .add(animal);
-
-            if (animal.getAge() == null) {
-                animalsNeedingVetInput.add(
-                        animal.getName() + "(" + animal.getSpecies() + ")"
-                );
-            }
-        }
+        List<String> animalsNeedingVetInput = allAnimals.stream()
+                .filter(animal -> animal.getAge() == null)
+                .map(animal -> animal.getName() + "(" + animal.getSpecies() + ")")
+                .toList();
 
         Map<String, Long> vaccinatedCounts = allAnimals.stream()
                 .filter(Animal::isVaccinated)
                 .collect(Collectors.groupingBy(
                         Animal::getSpecies,
+                        TreeMap::new,
                         Collectors.counting()
                 ));
 
@@ -41,22 +42,19 @@ public class ShelterAnalyticsService {
                 .filter(animal -> !animal.isVaccinated())
                 .collect(Collectors.groupingBy(
                         Animal::getSpecies,
+                        TreeMap::new,
                         Collectors.counting()
                 ));
 
         Map<String, Animal> oldestAnimalsBySpecies = allAnimals.stream()
                 .filter(animal -> animal.getAge() != null)
-                .collect(Collectors.groupingBy(
+                .collect(Collectors.toMap(
                         Animal::getSpecies,
-                        Collectors.collectingAndThen(
-                                Collectors.maxBy(
-                                        java.util.Comparator.comparingInt(
-                                                Animal::getAge
-                                        )
-                                ),
-                                optional -> optional.orElse(null)
-                        )
+                        Function.identity(),
+                        BinaryOperator.maxBy(Comparator.comparingInt(Animal::getAge)),
+                        TreeMap::new
                 ));
+
 
         return new ShelterReportData(
                 importResult,

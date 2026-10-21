@@ -79,7 +79,7 @@ public class CsvImportService {
                     LocalDate intakeDate = LocalDate.parse(
                             parts[4].trim(),
                             DateTimeFormatter.ofPattern(
-                                    "dd.MM.yyyy", Locale.ROOT
+                                    "dd.MM.uuuu", Locale.ROOT
                             ).withResolverStyle(ResolverStyle.STRICT)
                     );
 
