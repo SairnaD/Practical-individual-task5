@@ -1,2 +1,1 @@
-C:\Bootcamp\collection-training-project-main\src\main\resources\data\intake.csv
-C:\Bootcamp\collection-training-project-main\src\main\resources\data\intake_copy.csv
+
